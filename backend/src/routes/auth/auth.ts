@@ -3,6 +3,7 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import * as CryptoJS from "crypto-js"
 import { sign } from 'hono/jwt'
+import { signInUserSchema, signUpuserSchema } from "../../zod/schema"
 
 const authRouter = new Hono<{
     Bindings: {
@@ -15,13 +16,21 @@ authRouter.post('/signup', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
-    const payload = await c.req.json()
+
+    let payload = await c.req.json()
+    payload = signUpuserSchema.safeParse(payload)
+
+    if (!payload.success) {
+        c.status(400)
+        return c.json({ msg: 'Invalid request data' })
+    }
+
     try {
         const hashedPassword = CryptoJS.SHA256(payload.password).toString()
         const user = await prisma.user.create({
             data: {
-                name: payload.name,
-                email: payload.email,
+                name: payload.data.name,
+                email: payload.data.email,
                 password: hashedPassword
             }
         })
@@ -29,6 +38,7 @@ authRouter.post('/signup', async (c) => {
         c.status(201)
         return c.json({ "token": token })
     } catch(err) {
+        console.error(err)
         c.status(503)
         return c.json({ msg: "Oops, Please try again later" })
     }
@@ -38,12 +48,20 @@ authRouter.post('/signin', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env?.DATABASE_URL,
     }).$extends(withAccelerate())
-    const payload = await c.req.json()
+
+    let payload = await c.req.json()
+    payload = signInUserSchema.safeParse(payload)
+
+    if (!payload.success) {
+        c.status(400)
+        return c.json({ msg: 'Invalid request data' })
+    }
+
     try {
         const hashedPassword = CryptoJS.SHA256(payload.password).toString()
         const user = await prisma.user.findUnique({
             where: {
-                email: payload.email,
+                email: payload.data.email,
                 password: hashedPassword
             }
         })

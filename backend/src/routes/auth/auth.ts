@@ -13,7 +13,7 @@ const authRouter = new Hono<{
 
 authRouter.post('/signup', async (c) => {
     const prisma = new PrismaClient({
-        datasourceUrl: c.env?.DATABASE_URL,
+        datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
     const payload = await c.req.json()
     try {
@@ -30,7 +30,7 @@ authRouter.post('/signup', async (c) => {
         return c.json({ "token": token })
     } catch(err) {
         c.status(503)
-        return c.json({ "msg" : "Oops, Please try again later" })
+        return c.json({ msg: "Oops, Please try again later" })
     }
 })
 
@@ -49,14 +49,14 @@ authRouter.post('/signin', async (c) => {
         })
         if (!user) {
             c.status(404)
-            return c.json({ "msg": "You are not authenticated "})
+            return c.json({ msg: "You are not authenticated "})
         }
         const token = await sign({ id: user.id }, c.env?.JWT_SECRET)
-        c.status(201)
+        c.status(200)
         return c.json({ "token": token })
     } catch(err) {
         c.status(503)
-        return c.json({ "msg" : "Oops, Please try again later" })
+        return c.json({ msg : "Oops, Please try again later" })
     }
 })
 

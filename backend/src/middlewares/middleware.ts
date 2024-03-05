@@ -1,11 +1,13 @@
 import { Hono } from 'hono'
-import { jwt } from 'hono/jwt'
 import { verify } from 'hono/jwt'
 
 const authMiddleware = new Hono<{
 	Bindings: {
         JWT_SECRET: string
 	}
+    Variables: {
+        jwtPayload: string
+    }
 }>()
 
 authMiddleware.use("/blog/*", async (c, next) => {
@@ -23,3 +25,5 @@ authMiddleware.use("/blog/*", async (c, next) => {
     c.set('jwtPayload', payload.username)
     await next()
 })
+
+export default authMiddleware

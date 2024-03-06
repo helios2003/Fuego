@@ -1,5 +1,5 @@
 # Fuego
-Fuego (Spanish for 🔥) is a blogging website where users can publish their blogs and read other people's blogs. It is built using Hono as the serverless framework, PostgreSQL as database and React typescript as the frontend and Tailwind CSS for styling components.
+Fuego (Spanish for 🔥) is a blogging website where users can publish their blogs and read other people's blogs. It is built using Hono as the serverless framework, PostgreSQL as database and React typescript as the frontend framework, Recoil for state management and Tailwind CSS for styling components.
 
 ## Setting up the Repository
 - Create a fork of the repository or clone the repository using the command:

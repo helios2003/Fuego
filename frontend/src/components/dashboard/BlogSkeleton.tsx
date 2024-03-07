@@ -1,6 +1,6 @@
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
-import Navbar from './NavBar'
+import Navbar from '../utils/NavBar'
 
 export default function BlogSkeleton() {
     return (

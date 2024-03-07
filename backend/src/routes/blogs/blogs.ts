@@ -111,7 +111,19 @@ blogRouter.get('/blog/bulk', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate())
-    
+    try {
+        const page = parseInt((c.req.query as any).page) || 1
+        const limit = 10
+        const blogs = await prisma.blog.findMany({
+            skip: (page - 1) * limit,
+            take: limit
+        })
+        c.status(200)
+        return c.json({ msg: blogs })
+    } catch(err) {
+        c.status(503)
+        return c.json({ msg: "Oops, Please try again later" })
+    }
 })
 
 export default blogRouter

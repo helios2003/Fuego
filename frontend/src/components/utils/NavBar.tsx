@@ -32,7 +32,7 @@ export default function Navbar() {
                     className="h-6 w-6"
                     onClick={() => {navigate('/write')}}
                     />
-                    <span className="font-semibold text-xl" onClick={() => {navigate('/write')}}>Publish</span>
+                    <span className="font-semibold text-xl" onClick={() => {navigate('/write')}}>Write</span>
                 </div>
                 <div className={`text-2xl text-black ${color} h-12 w-12 rounded-full text-center mr-4 flex items-center justify-center`}>
                     H

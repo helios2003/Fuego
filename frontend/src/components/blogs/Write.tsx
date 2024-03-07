@@ -1,10 +1,12 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Navbar from './NavBar'
+import Navbar from '../utils/NavBar'
+import { titleAtom, contentAtom } from '../../store/atoms/preview'
+import { useRecoilState } from 'recoil'
 
 export default function Write() {
-  const [title, setTitle] = useState('')
-  const [markdownContent, setMarkdownContent] = useState('')
+  const [title, setTitle] = useRecoilState(titleAtom)
+  const [markdownContent, setMarkdownContent] = useRecoilState(contentAtom)
   const navigate = useNavigate()
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +38,7 @@ export default function Write() {
       <div className='space-x-4 ml-4'>
         <button
           className='bg-gray-500 h-8 w-20 rounded-md'
-          onClick={() => { navigate('/preview') }}>
+          onClick={() =>{ navigate('/preview') }}>
           Preview
         </button>
         <button

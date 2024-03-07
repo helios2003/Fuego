@@ -11,7 +11,11 @@ export default function Navbar() {
         console.log(randomColor)
         setColor(`bg-${randomColor}-500`)
         console.log("hello")
-    }, []);
+    }, [])
+
+    function LogOut() {
+        navigate('/signin')
+    }
     return (
         <div className="flex flex-row justify-between mt-2 shadow-md h-14">
             <div className="flex">
@@ -22,17 +26,20 @@ export default function Navbar() {
                     🔥
                 </span>
             </div>
-            <div className="flex items-center space-x-16 mr-6">
+            <div className="flex items-center space-x-8 mr-6">
                 <div className="flex items-center space-x-2">
                     <FaPenFancy
                     className="h-6 w-6"
                     onClick={() => {navigate('/write')}}
                     />
-                    <span className="font-semibold text-xl">Publish</span>
+                    <span className="font-semibold text-xl" onClick={() => {navigate('/write')}}>Publish</span>
                 </div>
                 <div className={`text-2xl text-black ${color} h-12 w-12 rounded-full text-center mr-4 flex items-center justify-center`}>
                     H
                 </div>
+                <button className="bg-gray-500 rounded-lg h-8 w-20" onClick={LogOut}>
+                    Logout
+                </button>
             </div>
         </div>
     )

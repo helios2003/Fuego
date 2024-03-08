@@ -12,6 +12,11 @@ const authRouter = new Hono<{
     }
 }>()
 
+function generateSalt(length: number) {
+    let salt = CryptoJS.lib.WordArray.random(length / 2).toString()
+    return salt;
+  }
+
 authRouter.post('/signup', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
@@ -19,14 +24,13 @@ authRouter.post('/signup', async (c) => {
 
     let payload = await c.req.json()
     payload = signUpuserSchema.safeParse(payload)
-
     if (!payload.success) {
         c.status(400)
         return c.json({ msg: 'Invalid request data' })
     }
 
     try {
-        const hashedPassword = CryptoJS.SHA256(payload.password).toString()
+        const hashedPassword = CryptoJS.SHA256(payload.password + generateSalt(16)).toString()
         const user = await prisma.user.create({
             data: {
                 name: payload.data.name,
@@ -36,7 +40,7 @@ authRouter.post('/signup', async (c) => {
         })
         const token = await sign({ id: user.id }, c.env?.JWT_SECRET)
         c.status(201)
-        return c.json({ "token": token })
+        return c.json({ "token": token, "name": user.name, "email": user.email, "authorId": user.id })
     } catch(err) {
         console.error(err)
         c.status(503)
@@ -58,7 +62,7 @@ authRouter.post('/signin', async (c) => {
     }
 
     try {
-        const hashedPassword = CryptoJS.SHA256(payload.password).toString()
+        const hashedPassword = CryptoJS.SHA256(payload.password + generateSalt(16)).toString()
         const user = await prisma.user.findUnique({
             where: {
                 email: payload.data.email,
@@ -67,11 +71,11 @@ authRouter.post('/signin', async (c) => {
         })
         if (!user) {
             c.status(404)
-            return c.json({ msg: "You are not authenticated "})
+            return c.json({ msg: "User doesn't exist" })
         }
         const token = await sign({ id: user.id }, c.env?.JWT_SECRET)
         c.status(200)
-        return c.json({ "token": token })
+        return c.json({ "token": token, "name": user.name, "email": user.email })
     } catch(err) {
         c.status(503)
         return c.json({ msg : "Oops, Please try again later" })

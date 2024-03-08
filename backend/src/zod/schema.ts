@@ -11,6 +11,6 @@ export const signInUserSchema = signUpuserSchema.omit({ name: true })
 export const blogSchema = z.object({
     title: z.string(),
     content: z.string(),
-    authorId: z.number()
+    authorId: z.string()
 })
 

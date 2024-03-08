@@ -1,9 +1,59 @@
 import { useNavigate } from "react-router-dom"
+import axios from "axios"
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { emailAtom, passwordAtom } from "../../store/atoms/auth"
+import { useRecoilState, useSetRecoilState } from "recoil"
 
 export default function SignIn() {
     const navigate = useNavigate()
-    function success() {
-        navigate('/dashboard')
+    const [email, setEmail] = useRecoilState(emailAtom)
+    const [password, setPassword] = useRecoilState(passwordAtom)
+    const setUser = useSetRecoilState(emailAtom)
+
+    const success = (time: number) => {
+        toast.success("Welcome to Fuego", { autoClose: time })
+    }
+    const failure1 = (time: number) => {
+        toast.error("Please provide correct inputs", { autoClose: time })
+    }
+    const failure2 = (time: number) => {
+        toast.error("Someone with the same email already exists", { autoClose: time })
+    }
+    const failure3 = (time: number) => {
+        toast.error("Oops!!, some error from our side, please try again", { autoClose: time })
+    }
+
+    async function Login() {
+        const url = 'http://localhost:8787/api/v1/user/signup'
+        try {
+            const res = await axios.post(url, { email, password })
+            console.log({ email, password })
+            if (res.status === 200) {
+                localStorage.setItem('token', res.data.token)
+                setUser(res.data.email)
+            } else if (res.status === 400) {
+                failure1(2000)
+            } else if (res.status === 204) {
+                failure2(2000)
+            } else {
+                failure3(2000)
+            }
+        } catch (err) {
+            failure3(2000)
+        }
+    }
+
+    async function handleLogin() {
+        await Login()
+        const token = localStorage.getItem('token')
+        if (token) {
+            success(2000)
+            navigate('/dashboard')
+        } else {
+            failure3(2000)
+            navigate('/signup')
+        }
     }
     return (
         <div className="grid grid-cols-2">
@@ -19,10 +69,20 @@ export default function SignIn() {
                     </button>
                 </span> <br />
                 <div className="mb-2">Username</div>
-                <input className="h-8 w-64 border border-black pl-2 rounded-md" placeholder="john@gmail.com" type="text"></input> <br />
+                <input
+                    className="h-8 w-64 border border-black pl-2 rounded-md"
+                    placeholder="john@gmail.com"
+                    type="text"
+                    onChange={(e) => setEmail(e.target.value)}>
+                </input> <br />
                 <div className="mb-2">Password</div>
-                <input className="h-8 w-64 border border-black pl-2 rounded-md" placeholder="pHq!!3xcp" type="text"></input> <br />
-                <button className="h-8 w-64 bg-black text-white rounded-md" onClick={success}>Sign In</button>
+                <input
+                    className="h-8 w-64 border border-black pl-2 rounded-md"
+                    placeholder="pHq!!3xcp"
+                    type="text"
+                    onChange={(e) => setPassword(e.target.value)}>
+                </input> <br />
+                <button className="h-8 w-64 bg-black text-white rounded-md" onClick={handleLogin}>Sign In</button>
             </div>
             <div className="bg-gray-300 flex justify-center items-center min-h-screen">
                 <img src="./home.png"
@@ -31,6 +91,7 @@ export default function SignIn() {
                 //className="mt-24 mb-36 ml-12 pr-16 pl-12 rounded-md" />
                 />
             </div>
+            <ToastContainer />
         </div>
     )
 }

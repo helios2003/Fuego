@@ -8,7 +8,6 @@ export default function Navbar() {
     useEffect(() => {
         const colors = ['red', 'blue', 'gray']
         const randomColor = colors[Math.floor(Math.random() * colors.length)]
-        console.log(randomColor)
         setColor(`bg-${randomColor}-500`)
         console.log("hello")
     }, [])

@@ -1,7 +1,6 @@
 import { Hono } from "hono"
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import authMiddleware from "../../middlewares/middleware"
 import { blogSchema } from "../../zod/schema"
 
 export const blogRouter = new Hono<{
@@ -20,6 +19,7 @@ blogRouter.post('/blog', async (c) => {
     }).$extends(withAccelerate())
 
     let payload = await c.req.json()
+    console.log(payload)
     payload = blogSchema.safeParse(payload)
 
     if (!payload.success) {
@@ -31,7 +31,7 @@ blogRouter.post('/blog', async (c) => {
             data: {
                 title: payload.data.title,
                 content: payload.data.content,
-                authorId: c.var.jwtPayload
+                authorId: payload.data.authorId
             }
         })
         c.status(201)
@@ -40,6 +40,7 @@ blogRouter.post('/blog', async (c) => {
             id: blog.id
         })
     } catch(err) {
+        console.error(err)
         c.status(503)
         return c.json({ msg: "Oops, Please try again later" })
     }
@@ -84,6 +85,7 @@ blogRouter.put('/blog', async (c) => {
     }
 })
 
+// Get the blogs by the specific 
 blogRouter.get('/blog/:id', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
@@ -92,7 +94,7 @@ blogRouter.get('/blog/:id', async (c) => {
     try {
         const findBlog = prisma.blog.findUnique({
             where: {
-                id: parseInt(blogId)
+                id: blogId
             }
         })
         if (!findBlog) {

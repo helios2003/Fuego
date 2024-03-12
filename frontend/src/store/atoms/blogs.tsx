@@ -9,3 +9,8 @@ export const contentAtom = atom({
     key: "contentAtom",
     default: ''
 })
+
+export const blogsAtom = atom({
+    key: "blogsAtom",
+    default: ""
+})

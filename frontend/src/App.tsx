@@ -4,13 +4,16 @@ import SignIn from "./components/auth/SignIn"
 import Navbar from "./components/utils/NavBar"
 import Preview from "./components/blogs/Preview"
 import Write from "./components/blogs/Write"
+import Blog from "./components/blogs/Blog"
+import UserProfile from "./components/utils/UserProfile"
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<SignUp />} />
+          <Route path="/" element={<UserProfile />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/preview" element={<Preview />} />
           <Route path="/write" element={<Write />} />
           <Route path="/signin" element={<SignIn />} />

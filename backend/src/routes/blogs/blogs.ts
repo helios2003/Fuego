@@ -85,7 +85,7 @@ blogRouter.put('/blog', async (c) => {
     }
 })
 
-// Get the blogs by the specific 
+// Get the blogs by the specific id
 blogRouter.get('/blog/:id', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
@@ -109,6 +109,7 @@ blogRouter.get('/blog/:id', async (c) => {
     }
 })
 
+// get all the blogs
 blogRouter.get('/blog/bulk', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,

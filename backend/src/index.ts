@@ -15,6 +15,6 @@ app.use('*', cors({
 }))
 
 app.route('/api/v1/user', authRouter)
-app.route('/api/v1/blog', blogRouter)
+app.route('/api/v1/blogs', blogRouter)
 
 export default app

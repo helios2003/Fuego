@@ -1,23 +1,28 @@
-import { FaPenFancy } from "react-icons/fa";
-import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
-import { useNavigate } from "react-router-dom";
-import UserProfile from "./UserProfile";
+import { FaPenFancy } from "react-icons/fa"
+import { useEffect, useState } from 'react'
+import Modal from 'react-modal'
+import { useNavigate } from "react-router-dom"
+import UserProfile from "./UserProfile"
+import { useRecoilValue } from "recoil"
+import { nameAtom } from "../../store/atoms/auth"
 
 export default function Navbar() {
-  const [color, setColor] = useState('');
-  const [modal, setModal] = useState(false);
-  const navigate = useNavigate();
+  const [color, setColor] = useState('')
+  const [modal, setModal] = useState(false)
+  const name = useRecoilValue(nameAtom)
+  const navigate = useNavigate()
+
+  const firstCharacter = name[0]
 
   useEffect(() => {
-    const colors = ['red', 'blue', 'gray'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    setColor(`bg-${randomColor}-500`);
-  }, []);
+    const colors = ['red', 'blue', 'gray']
+    const randomColor = colors[Math.floor(Math.random() * colors.length)]
+    setColor(`bg-${randomColor}-500`)
+  }, [])
 
   function LogOut() {
-    localStorage.removeItem('token');
-    navigate('/signin');
+    localStorage.removeItem('token')
+    navigate('/signin')
   }
 
   return (
@@ -33,7 +38,7 @@ export default function Navbar() {
         </div>
         <div className={`text-2xl text-black ${color} h-12 w-12 rounded-full text-center mr-4 flex items-center justify-center cursor-pointer`}
              onClick={() => setModal(true)}>
-          H
+          {firstCharacter}
         </div>
         <button className="bg-gray-500 rounded-lg h-8 w-20" onClick={LogOut}>Logout</button>
       </div>
@@ -52,5 +57,5 @@ export default function Navbar() {
         <UserProfile />
       </Modal>
     </div>
-  );
+  )
 }

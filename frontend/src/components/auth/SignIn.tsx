@@ -2,14 +2,17 @@ import { useNavigate } from "react-router-dom"
 import axios from "axios"
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { emailAtom, passwordAtom } from "../../store/atoms/auth"
+import { emailAtom, idAtom, nameAtom, passwordAtom } from "../../store/atoms/auth"
 import { useRecoilState, useSetRecoilState } from "recoil"
+import { blogsAtom } from "../../store/atoms/blogs"
 
 export default function SignIn() {
     const navigate = useNavigate()
     const [email, setEmail] = useRecoilState(emailAtom)
     const [password, setPassword] = useRecoilState(passwordAtom)
-    const setUser = useSetRecoilState(emailAtom)
+    const setId = useSetRecoilState(idAtom)
+    const setUser = useSetRecoilState(nameAtom)
+    const setBlogs = useSetRecoilState(blogsAtom)
 
     const success = (time: number) => {
         toast.success("Welcome to Fuego", { autoClose: time })
@@ -23,17 +26,24 @@ export default function SignIn() {
     const failure3 = (time: number) => {
         toast.error("Oops!!, some error from our side, please try again", { autoClose: time })
     }
+    const failure4 = (time: number) => {
+        toast.error("Invalid password", { autoClose: time })
+    }
 
     async function Login() {
-        const url = 'http://localhost:8787/api/v1/user/signup'
+        const url = 'http://localhost:8787/api/v1/user/signin'
         try {
             const res = await axios.post(url, { email, password })
             console.log({ email, password })
             if (res.status === 200) {
                 localStorage.setItem('token', res.data.token)
-                setUser(res.data.email)
+                setId(res.data.authorId)
+                setUser(res.data.name)
+                setBlogs(res.data.blogs)
             } else if (res.status === 400) {
                 failure1(2000)
+            } else if (res.status === 401) {
+                failure4(2000)
             } else if (res.status === 204) {
                 failure2(2000)
             } else {
@@ -52,7 +62,7 @@ export default function SignIn() {
             navigate('/dashboard')
         } else {
             failure3(2000)
-            navigate('/signup')
+            navigate('/')
         }
     }
     return (

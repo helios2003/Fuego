@@ -14,3 +14,8 @@ export const blogsAtom = atom({
     key: "blogsAtom",
     default: ""
 })
+
+export const allBlogsAtom = atom({
+    key: "allBlogsAtom",
+    default: []
+})

@@ -19,6 +19,8 @@ model User {
   password    String  
   name        String
   posts       Blog[]
+  salt        String       
+  blogs       Int           @default(0)
 }
 
 model Blog {

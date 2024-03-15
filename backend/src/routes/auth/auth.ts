@@ -30,17 +30,19 @@ authRouter.post('/signup', async (c) => {
     }
 
     try {
-        const hashedPassword = CryptoJS.SHA256(payload.password + generateSalt(16)).toString()
+        const salt = generateSalt(16)
+        const hashedPassword = CryptoJS.SHA256(payload.password + salt).toString()
         const user = await prisma.user.create({
             data: {
                 name: payload.data.name,
                 email: payload.data.email,
-                password: hashedPassword
+                password: hashedPassword,
+                salt: salt
             }
         })
         const token = await sign({ id: user.id }, c.env?.JWT_SECRET)
         c.status(201)
-        return c.json({ "token": token, "name": user.name, "email": user.email, "authorId": user.id })
+        return c.json({ "token": token, "name": user.name, "email": user.email, "authorId": user.id, "blogs": user.blogs })
     } catch(err) {
         console.error(err)
         c.status(503)
@@ -54,6 +56,7 @@ authRouter.post('/signin', async (c) => {
     }).$extends(withAccelerate())
 
     let payload = await c.req.json()
+    console.log(payload)
     payload = signInUserSchema.safeParse(payload)
 
     if (!payload.success) {
@@ -62,20 +65,23 @@ authRouter.post('/signin', async (c) => {
     }
 
     try {
-        const hashedPassword = CryptoJS.SHA256(payload.password + generateSalt(16)).toString()
         const user = await prisma.user.findUnique({
             where: {
                 email: payload.data.email,
-                password: hashedPassword
             }
         })
         if (!user) {
             c.status(404)
             return c.json({ msg: "User doesn't exist" })
         }
+        const hashedPassword = CryptoJS.SHA256(payload.password + user.salt).toString()
+        if (hashedPassword !== user.password) {
+            c.status(401)
+            return c.json({ msg: "Invalid password" })
+        }
         const token = await sign({ id: user.id }, c.env?.JWT_SECRET)
         c.status(200)
-        return c.json({ "token": token, "name": user.name, "email": user.email })
+        return c.json({ "token": token, "name": user.name, "email": user.email, "authorId": user.id, "blogs": user.blogs })
     } catch(err) {
         c.status(503)
         return c.json({ msg : "Oops, Please try again later" })

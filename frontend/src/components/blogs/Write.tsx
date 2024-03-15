@@ -60,7 +60,7 @@ export default function Write() {
   type Tag = {
     id: string;
     text: string;
-  };
+  }
 
   const handleDelete = (i: number): void => {
     setTags(tags.filter((tag, index) => index !== i));
@@ -74,8 +74,7 @@ export default function Write() {
   async function Publish() {
     const url = 'http://localhost:8787/api/v1/blogs/blog'
     try {
-      const res = await axios.post(url, { title: title, content: markdownContent, authorId: authorId, tags: tags.map(tag => tag.text)
-      })
+      const res = await axios.post(url, { title: title, content: markdownContent, authorId: authorId })
       if (res.status === 201) {
         success(2000)
         setShowConfetti(true)

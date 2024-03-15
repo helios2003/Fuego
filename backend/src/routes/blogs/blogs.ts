@@ -13,6 +13,7 @@ export const blogRouter = new Hono<{
     }
 }>()
 
+// post a new blog
 blogRouter.post('/blog', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
@@ -34,6 +35,46 @@ blogRouter.post('/blog', async (c) => {
                 authorId: payload.data.authorId
             }
         })
+        blogRouter.post('/blog', async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+
+    let payload = await c.req.json()
+    console.log(payload)
+    payload = blogSchema.safeParse(payload)
+
+    if (!payload.success) {
+        c.status(400)
+        return c.json({ msg: 'Invalid request data' })
+    }
+    try {
+        const blog = await prisma.blog.create({
+            data: {
+                title: payload.data.title,
+                content: payload.data.content,
+                authorId: payload.data.authorId
+            }
+        })
+        await prisma.user.update({
+            where: { id: payload.data.authorId },
+            data: {
+              blogs: {
+                increment: 1
+              }
+            }
+        })
+        c.status(201)
+        return c.json({ 
+            msg: "Blog successfully created",
+            id: blog.id
+        })
+    } catch(err) {
+        console.error(err)
+        c.status(503)
+        return c.json({ msg: "Oops, Please try again later" })
+    }
+})
         c.status(201)
         return c.json({ 
             msg: "Blog successfully created",
@@ -46,6 +87,7 @@ blogRouter.post('/blog', async (c) => {
     }
 })
 
+// updating an existing blog
 blogRouter.put('/blog', async (c) => {
     const prisma = new PrismaClient({
         datasourceUrl: c.env.DATABASE_URL,
@@ -117,10 +159,8 @@ blogRouter.get('/blog/bulk', async (c) => {
     try {
         const page = parseInt((c.req.query as any).page) || 1
         const limit = 10
-        const blogs = await prisma.blog.findMany({
-            skip: (page - 1) * limit,
-            take: limit
-        })
+        const blogs = await prisma.blog.findMany({})
+        console.log("blogs are", blogs)
         c.status(200)
         return c.json({ msg: blogs })
     } catch(err) {

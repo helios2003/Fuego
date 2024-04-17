@@ -8,7 +8,7 @@ git clone https://github.com/helios2003/Fuego.git
 ```
 ### Backend
 - Change the directory into ``backend`` and run ``npm install``.
-- Obtain a PostgreSQL database and enabe connection pooling in it.
+- Obtain a PostgreSQL database and enable connection pooling in it.
 - Rename ``.env.example`` to ``.env`` and ``wrangler-example.toml`` to ``wrangler.toml`` and fill the environment variables.
 - In ``.env`` add the original database URL and in the ``wrangler.toml`` add the pooled database URL.
 - Run the command to generate the database schema.
@@ -25,6 +25,12 @@ npx prisma generate --no-engine
 ### Frontend
 - Change the directory into ``frontend`` and run ``npm install``.
 - Run ``npm run dev`` to start the frontend.
+
+## Features to be Added
+- Adding images and videos to the blogs.
+- Adding tags to the blogs.
+- Following other users.
+- Upvotes and downvotes for the blogs.
 
 ## References
 - https://hono.dev

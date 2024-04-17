@@ -6,22 +6,13 @@ import 'react-toastify/dist/ReactToastify.css'
 import { titleAtom, contentAtom } from '../../store/atoms/blogs'
 import { idAtom } from '../../store/atoms/auth'
 import { useRecoilState, useRecoilValue } from 'recoil'
-import { WithContext as ReactTags } from 'react-tag-input'
 import Confetti from 'react-confetti'
 import axios from 'axios'
-
-const KeyCodes = {
-  comma: 188,
-  enter: 13,
-};
-
-const delimiters = [KeyCodes.comma, KeyCodes.enter]
 
 export default function Write() {
   const [title, setTitle] = useRecoilState(titleAtom)
   const [markdownContent, setMarkdownContent] = useRecoilState(contentAtom)
   const authorId = useRecoilValue(idAtom)
-  const [tags, setTags] = useState<Tag[]>([]);
   const navigate = useNavigate()
   const [showConfetti, setShowConfetti] = useState(false)
 
@@ -56,20 +47,6 @@ export default function Write() {
     e.preventDefault()
     e.returnValue = "You have unsaved changes, do you want to leave?"
   }
-
-  type Tag = {
-    id: string;
-    text: string;
-  }
-
-  const handleDelete = (i: number): void => {
-    setTags(tags.filter((tag, index) => index !== i));
-  }
-
-  const handleAddition = (tag: Tag): void => {
-    setTags([...tags, tag]);
-  }
-
 
   async function Publish() {
     const url = 'http://localhost:8787/api/v1/blogs/blog'
@@ -114,18 +91,6 @@ export default function Write() {
           placeholder="Write your blog post"
           rows={12}
         />
-        <div id="tags">
-          <ReactTags
-            tags={tags}
-            delimiters={delimiters}
-            handleDelete={handleDelete}
-            handleAddition={handleAddition}
-            inputFieldPosition="bottom"
-            autocomplete
-            allowDragDrop={false}
-          />
-        </div>
-
       </div>
       <div className='space-x-4 ml-4'>
         <button

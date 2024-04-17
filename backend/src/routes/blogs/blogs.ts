@@ -127,6 +127,31 @@ blogRouter.put('/blog', async (c) => {
     }
 })
 
+// get all the blogs
+blogRouter.get('/blog/bulk', async (c) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+    try {
+        const blogs = await prisma.blog.findMany({
+            select: {
+                id: true,
+                title: true,
+                content: true,
+            }
+        })
+        if (!blogs.length) {
+            c.status(400)
+            return c.json({ msg: "No blogs posted till now" })
+        }
+        c.status(200)
+        return c.json({ blogs })
+    } catch(err) {
+        c.status(503)
+        return c.json({ msg: "Oops, Please try again later" })
+    }
+})
+
 // Get the blogs by the specific id
 blogRouter.get('/blog/:id', async (c) => {
     const prisma = new PrismaClient({
@@ -134,7 +159,7 @@ blogRouter.get('/blog/:id', async (c) => {
     }).$extends(withAccelerate())
     const blogId = c.req.param('id')
     try {
-        const findBlog = prisma.blog.findUnique({
+        const findBlog = await prisma.blog.findUnique({
             where: {
                 id: blogId
             }
@@ -145,24 +170,6 @@ blogRouter.get('/blog/:id', async (c) => {
         }
         c.status(200)
         return c.json({ msg: findBlog })
-    } catch(err) {
-        c.status(503)
-        return c.json({ msg: "Oops, Please try again later" })
-    }
-})
-
-// get all the blogs
-blogRouter.get('/blog/bulk', async (c) => {
-    const prisma = new PrismaClient({
-        datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate())
-    try {
-        const page = parseInt((c.req.query as any).page) || 1
-        const limit = 10
-        const blogs = await prisma.blog.findMany({})
-        console.log("blogs are", blogs)
-        c.status(200)
-        return c.json({ msg: blogs })
     } catch(err) {
         c.status(503)
         return c.json({ msg: "Oops, Please try again later" })

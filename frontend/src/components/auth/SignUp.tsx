@@ -90,7 +90,7 @@ export default function SignUp() {
                 <input
                     className="h-8 w-64 border border-black pl-2 rounded-md"
                     placeholder="pHq!!3xcp"
-                    type="text"
+                    type="password"
                     onChange={(e) => setPassword(e.target.value)}
                 >
                 </input>

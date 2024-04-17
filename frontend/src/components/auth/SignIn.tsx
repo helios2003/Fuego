@@ -89,7 +89,7 @@ export default function SignIn() {
                 <input
                     className="h-8 w-64 border border-black pl-2 rounded-md"
                     placeholder="pHq!!3xcp"
-                    type="text"
+                    type="password"
                     onChange={(e) => setPassword(e.target.value)}>
                 </input> <br />
                 <button className="h-8 w-64 bg-black text-white rounded-md" onClick={handleLogin}>Sign In</button>

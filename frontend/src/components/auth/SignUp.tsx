@@ -26,7 +26,7 @@ export default function SignUp() {
     }
 
     async function Register() {
-        const url = 'http://localhost:8787/api/v1/user/signup'
+        const url = 'https://backend.ankitdash2019.workers.dev/api/v1/user/signup'
         try {
             const res = await axios.post(url, { name, email, password })
             if (res.status === 201) {

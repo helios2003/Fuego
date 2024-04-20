@@ -31,7 +31,7 @@ export default function SignIn() {
     }
 
     async function Login() {
-        const url = 'http://localhost:8787/api/v1/user/signin'
+        const url = 'https://backend.ankitdash2019.workers.dev/api/v1/user/signin'
         try {
             const res = await axios.post(url, { email, password })
             console.log({ email, password })

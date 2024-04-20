@@ -18,7 +18,7 @@ export default function MainPage() {
   const [loading, setLoading] = useState(true)
 
   async function getAllBlogs() {
-    const url = 'http://localhost:8787/api/v1/blogs/blog/bulk'
+    const url = 'https://backend.ankitdash2019.workers.dev/api/v1/blogs/blog/bulk'
     try {
       const res = await axios.get(url)
       if (res.status === 200) {

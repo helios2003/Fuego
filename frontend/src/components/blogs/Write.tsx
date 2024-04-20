@@ -49,7 +49,7 @@ export default function Write() {
   }
 
   async function Publish() {
-    const url = 'http://localhost:8787/api/v1/blogs/blog'
+    const url = 'https://backend.ankitdash2019.workers.dev/api/v1/blogs/blog'
     try {
       const res = await axios.post(url, { title: title, content: markdownContent, authorId: authorId })
       if (res.status === 201) {

@@ -46,11 +46,15 @@ export default function MainPage() {
           allBlogs.map((blog: Blog, index: number) => (
             <div key={index} className="grid grid-cols-[0.05fr_0.95fr] gap-4 pt-2 pl-2 border-b-2 pb-2">
               <div>
-                <IoPersonCircle className="h-14 w-14"/>
+                <IoPersonCircle className="h-14 w-14" />
               </div>
               <div className="-mt-4">
-                <ReactMarkdown className="markdown">{blog.title}</ReactMarkdown>
-                <ReactMarkdown className="markdown">{blog.content}</ReactMarkdown>
+                <ReactMarkdown className="markdown">
+                  {blog.title.length > 50 ? `${blog.title.slice(0, 50)}...` : blog.title}
+                </ReactMarkdown>
+                <ReactMarkdown className="markdown">
+                  {blog.content.length > 200 ? `${blog.content.slice(0, 200)}...` : blog.content}
+                </ReactMarkdown>
               </div>
             </div>
           ))

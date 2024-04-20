@@ -12,7 +12,7 @@ export const contentAtom = atom({
 
 export const blogsAtom = atom({
     key: "blogsAtom",
-    default: ""
+    default: "0"
 })
 
 export const allBlogsAtom = atom({

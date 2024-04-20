@@ -22,7 +22,7 @@ const Preview: React.FC = () => {
         <ReactMarkdown className="markdown ml-2 mr-1">{markdownContent ? markdownContent : "No content"}</ReactMarkdown>
       </div>
       <div>
-        <button className='bg-gray-500 ml-2 h-8 w-16 rounded-lg mt-4' onClick={() => navigate('/write')}>Edit</button>
+        <button className='bg-gray-500 ml-2 h-8 w-16 rounded-lg mt-4 mb-4' onClick={() => navigate('/write')}>Edit</button>
       </div>
     </>
   )

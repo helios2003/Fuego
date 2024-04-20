@@ -22,8 +22,8 @@ export default function MainPage() {
     try {
       const res = await axios.get(url)
       if (res.status === 200) {
-        setAllBlogs(res.data.blogs)
-        console.log(allBlogs)
+        const reversedBlogs = res.data.blogs.slice().reverse()
+        setAllBlogs(reversedBlogs)
         setLoading(false)
       }
     } catch (err) {

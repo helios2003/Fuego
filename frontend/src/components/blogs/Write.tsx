@@ -51,6 +51,10 @@ export default function Write() {
   async function Publish() {
     const url = 'http://localhost:8787/api/v1/blogs/blog'
     try {
+      if (title.length === 0 || markdownContent.length === 0) {
+        failure1(2000)
+        return
+      }
       const res = await axios.post(url, { title: title, content: markdownContent, authorId: authorId })
       if (res.status === 201) {
         success(2000)

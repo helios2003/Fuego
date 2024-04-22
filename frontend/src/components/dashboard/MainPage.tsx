@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { useRecoilState } from "recoil"
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { allBlogsAtom } from "../../store/atoms/blogs"
 import Navbar from "../utils/NavBar"
 import BlogSkeleton from "./BlogSkeleton"
@@ -16,6 +18,13 @@ type Blog = {
 export default function MainPage() {
   const [allBlogs, setAllBlogs] = useRecoilState(allBlogsAtom)
   const [loading, setLoading] = useState(true)
+
+  const success = (time: number) => {
+    toast.success("Welcome to Fuego", { 
+      position: "top-center",
+      autoClose: time
+    })
+  }
 
   async function getAllBlogs() {
     const url = 'http://localhost:8787/api/v1/blogs/blog/bulk'
@@ -33,6 +42,7 @@ export default function MainPage() {
 
 
   useEffect(() => {
+    success(2000)
     getAllBlogs()
   }, [])
 
@@ -40,7 +50,7 @@ export default function MainPage() {
     <>
       <Navbar />
       {loading ?
-        (<BlogSkeleton amount={4} />)
+        (<BlogSkeleton amount={3} />)
         :
         (
           allBlogs.map((blog: Blog, index: number) => (
@@ -59,6 +69,7 @@ export default function MainPage() {
             </div>
           ))
         )}
+        <ToastContainer />
     </>
   )
 }

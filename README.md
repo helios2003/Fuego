@@ -26,6 +26,11 @@ npx prisma generate --no-engine
 - Change the directory into ``frontend`` and run ``npm install``.
 - Run ``npm run dev`` to start the frontend.
 
+## Deployment
+- Login to the deployment using the following crendentials:  <br /> 
+    Username fuego@gmail.com <br />
+    password 111111.
+
 ## Features to be Added
 - Adding images and videos to the blogs.
 - Adding tags to the blogs.

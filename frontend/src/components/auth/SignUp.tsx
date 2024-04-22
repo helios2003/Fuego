@@ -12,9 +12,6 @@ export default function SignUp() {
     const [password, setPassword] = useRecoilState(passwordAtom)
     const setUser = useSetRecoilState(idAtom)
 
-    const success = (time: number) => {
-        toast.success("Welcome to Fuego", { autoClose: time })
-    }
     const failure1 = (time: number) => {
         toast.error("Please provide correct inputs", { autoClose: time })
     }
@@ -31,9 +28,7 @@ export default function SignUp() {
             const res = await axios.post(url, { name, email, password })
             if (res.status === 201) {
                 localStorage.setItem('token', res.data.token)
-                console.log(res.data.authorId)
                 setUser(res.data.authorId)
-                //console.log(setUser(res.data.authorId))
             } else if (res.status === 400) {
                 failure1(2000)
             } else if (res.status === 204) {
@@ -50,7 +45,6 @@ export default function SignUp() {
         await Register()
         const token = localStorage.getItem('token')
         if (token) {
-            success(2000)
             navigate('/dashboard')
         } else {
             failure3(2000)

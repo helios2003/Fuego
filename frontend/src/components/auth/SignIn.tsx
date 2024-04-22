@@ -14,9 +14,6 @@ export default function SignIn() {
     const setUser = useSetRecoilState(nameAtom)
     const setBlogs = useSetRecoilState(blogsAtom)
 
-    const success = (time: number) => {
-        toast.success("Welcome to Fuego", { autoClose: time })
-    }
     const failure1 = (time: number) => {
         toast.error("Please provide correct inputs", { autoClose: time })
     }
@@ -58,7 +55,6 @@ export default function SignIn() {
         await Login()
         const token = localStorage.getItem('token')
         if (token) {
-            success(2000)
             navigate('/dashboard')
         } else {
             failure3(2000)

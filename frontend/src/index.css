@@ -4,5 +4,5 @@
 
 .markdown > * {
     all: revert;
-    line-height: 0.8;
+    line-height: 1.1;
   }

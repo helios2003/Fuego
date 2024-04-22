@@ -59,8 +59,9 @@ export default function Write() {
       if (res.status === 201) {
         success(2000)
         setShowConfetti(true)
+        const blogId = res.data.id
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate(`/blog/${blogId}`)
           setShowConfetti(false)
         }, 3000)
       } else if (res.status === 400) {

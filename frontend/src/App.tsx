@@ -6,6 +6,7 @@ import Write from "./components/blogs/Write"
 import MainPage from "./components/dashboard/MainPage"
 import Error from "./components/utils/404"
 import PrivateRoute from "./components/utils/PrivateRoute"
+import ViewBlog from "./components/blogs/ViewBlog"
 
 function App() {
   return (
@@ -30,6 +31,12 @@ function App() {
             element={
               <PrivateRoute>
                 <MainPage />
+              </PrivateRoute>
+            } />
+          <Route path="/blog/:blogId"
+            element={
+              <PrivateRoute>
+                <ViewBlog />
               </PrivateRoute>
             } />
           <Route path="*" element={<Error />} />

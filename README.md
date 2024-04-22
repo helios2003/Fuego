@@ -28,8 +28,8 @@ npx prisma generate --no-engine
 
 ## Deployment
 - Login to the deployment using the following crendentials:  <br /> 
-    Username fuego@gmail.com <br />
-    password 111111.
+    Username: fuego@gmail.com <br />
+    Password: 111111.
 
 ## Features to be Added
 - Adding images and videos to the blogs.

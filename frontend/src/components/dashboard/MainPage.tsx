@@ -8,6 +8,7 @@ import Navbar from "../utils/NavBar"
 import BlogSkeleton from "./BlogSkeleton"
 import ReactMarkdown from 'react-markdown'
 import { IoPersonCircle } from "react-icons/io5"
+import { useNavigate } from "react-router-dom"
 
 type Blog = {
   id: string,
@@ -18,9 +19,10 @@ type Blog = {
 export default function MainPage() {
   const [allBlogs, setAllBlogs] = useRecoilState(allBlogsAtom)
   const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
 
   const success = (time: number) => {
-    toast.success("Welcome to Fuego", { 
+    toast.success("Welcome to Fuego", {
       position: "top-center",
       autoClose: time
     })
@@ -58,7 +60,9 @@ export default function MainPage() {
               <div>
                 <IoPersonCircle className="h-14 w-14" />
               </div>
-              <div className="-mt-4">
+              <div className="-mt-4 cursor-pointer" onClick={() => {
+                navigate(`/blog/${blog?.id}`)
+              }}>
                 <ReactMarkdown className="markdown">
                   {blog.title.length > 50 ? `${blog.title.slice(0, 50)}...` : blog.title}
                 </ReactMarkdown>
@@ -69,7 +73,7 @@ export default function MainPage() {
             </div>
           ))
         )}
-        <ToastContainer />
+      <ToastContainer />
     </>
   )
 }

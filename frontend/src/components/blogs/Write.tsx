@@ -51,12 +51,17 @@ export default function Write() {
   async function Publish() {
     const url = 'https://backend.ankitdash2019.workers.dev/api/v1/blogs/blog'
     try {
+      if (title.length === 0 || markdownContent.length === 0) {
+        failure1(2000)
+        return
+      }
       const res = await axios.post(url, { title: title, content: markdownContent, authorId: authorId })
       if (res.status === 201) {
         success(2000)
         setShowConfetti(true)
+        const blogId = res.data.id
         setTimeout(() => {
-          navigate('/dashboard')
+          navigate(`/blog/${blogId}`)
           setShowConfetti(false)
         }, 3000)
       } else if (res.status === 400) {

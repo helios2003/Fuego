@@ -15,8 +15,8 @@ export default function BlogSkeleton({ amount }: BlogSkeletonProps) {
                         <Skeleton circle width={60} height={60} />
                     </div>
                     <div className="flex-grow">
-                        <Skeleton height={25} />
-                        <Skeleton count={3} />
+                        <Skeleton height={40} />
+                        <Skeleton count={4} />
                     </div>
                 </div>
             ))}

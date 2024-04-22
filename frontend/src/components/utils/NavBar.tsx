@@ -14,11 +14,16 @@ export default function Navbar() {
     navigate('/signin')
   }
 
+  function handleClick() {
+    const token = localStorage.getItem('token')
+    return token ? navigate('/dashboard') : navigate('/signin')
+  }
+
   return (
     <div className="flex flex-row justify-between mt-2 shadow-md h-14">
       <div className="flex">
-        <span className="text-2xl ml-4 font-semibold mt-2 cursor-pointer" onClick={() => {navigate('/signin')}}>Fuego</span>
-        <span className="text-4xl cursor-pointer" onClick={() => {navigate('/signin')}}>🔥</span>
+        <span className="text-2xl ml-4 font-semibold mt-2 cursor-pointer" onClick={handleClick}>Fuego</span>
+        <span className="text-4xl cursor-pointer" onClick={handleClick}>🔥</span>
       </div>
       <div className="flex items-center space-x-8 mr-6">
         <div className="flex items-center space-x-2">
